@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新竹市北區港北社區發展協會 - 香草植物認知機智問答</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f4f9f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .music-toggle-btn {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: #e8f5e9;
+            border: 2px solid #81c784;
+            color: #2e7d32;
+            padding: 8px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+        }
+        .music-toggle-btn:hover {
+            background: #c8e6c9;
+        }
+        h1 {
+            color: #2e7d32;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 5px;
+            margin-top: 10px;
+        }
+        h3 {
+            color: #558b2f;
+            text-align: center;
+            font-size: 18px;
+            margin-top: 0;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: #666;
+            background: #f9f9f9;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            transition: 0.2s;
+        }
+        .tab.active {
+            background: #2e7d32;
+            color: white;
+            border-bottom: 2px solid #2e7d32;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .herb-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            gap: 15px;
+        }
+        .herb-media {
+            min-width: 80px;
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e8f5e9;
+            font-size: 32px;
+            flex-shrink: 0;
+            border: 1px solid #c8e6c9;
+        }
+        .herb-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .herb-info {
+            flex: 1;
+        }
+        .herb-info h4 {
+            margin: 0 0 5px 0;
+            color: #2e7d32;
+            font-size: 18px;
+        }
+        .herb-info p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+        .speak-btn {
+            background: #e8f5e9;
+            border: 1px solid #81c784;
+            color: #2e7d32;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .speak-btn:hover {
+            background: #c8e6c9;
+        }
+        .question-box {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1b5e20;
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 12px;
+            background: #ffffff;
+            border: 2px solid #c8e6c9;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .option-btn:hover {
+            background: #f1f8e9;
+            border-color: #81c784;
+        }
+        .option-btn.correct {
+            background: #c8e6c9 !important;
+            border-color: #4caf50 !important;
+            color: #1b5e20;
+            font-weight: bold;
+        }
+        .option-btn.wrong {
+            background: #ffcdd2 !important;
+            border-color: #e57373 !important;
+            color: #b71c1c;
+        }
+        #feedback-box {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+        }
+        #feedback-box.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+            display: block;
+        }
+        #feedback-box.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+            display: block;
+        }
+        .btn-action {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .btn-action:hover {
+            background: #1b5e20;
+        }
+        .result-screen {
+            text-align: center;
+            padding: 30px;
+        }
+        .footer {
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 右上角保留靜音/播放切換按鈕，方便隨時關閉音樂 -->
+    <button id="music-btn" class="music-toggle-btn" onclick="toggleMusic()">⏸️ 暫停音樂</button>
+
+    <h1>🌿 港北社區・長者健康學堂 🌿</h1>
+    <h3>香草植物導覽與趣味小測驗</h3>
+
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab(0)">🌱 14種植物圖文導覽</div>
+        <div class="tab" onclick="switchTab(1)">🎯 趣味機智問答</div>
+    </div>
+
+    <div id="tab-0" class="tab-content active">
+        <p style="color: #666; font-size: 14px;">點選下方清單瀏覽介紹，或點擊「🔊 語音介紹」聽取說明：</p>
+        <div id="herb-list"></div>
+    </div>
+
+    <div id="tab-1" class="tab-content">
+        <div id="quiz-container">
+            <div id="question-counter" style="font-weight: bold; color: #666; margin-bottom: 10px;"></div>
+            <div id="question-text" class="question-box"></div>
+            <button class="speak-btn" onclick="speakCurrentQuestion()">🔊 唸出題目</button>
+            <div id="options-container" style="margin-top: 15px;"></div>
+            <div id="feedback-box"></div>
+            <button id="next-btn" class="btn-action" style="display:none;" onclick="nextQuestion()">下一題</button>
+        </div>
+        <div id="result-container" class="result-screen" style="display:none;">
+            <h2 style="color: #2e7d32;">🏆 闖關完成！ 🏆</h2>
+            <p id="score-text" style="font-size: 20px; font-weight: bold;"></p>
+            <p id="comment-text" style="font-size: 16px; color: #666;"></p>
+            <button class="btn-action" onclick="restartQuiz()">再玩一次</button>
+        </div>
+    </div>
+
+    <div class="footer">新竹市北區港北社區發展協會 版權所有</div>
+</div>
+
+<audio id="bgm" src="background_music.mp3" loop autoplay></audio>
+<audio id="success-sound" src="success.mp3"></audio>
+<audio id="fail-sound" src="fail.mp3"></audio>
+<audio id="cheer-sound" src="cheer.mp3"></audio>
+
+<script>
+    const herbsData = [
+        { name: "蘆薈", icon: "🌵", desc: "富含多醣體，具保濕、舒緩皮膚與促進傷口癒合之效，凝膠亦可食用。" },
+        { name: "冰菜", icon: "❄️", desc: "「蔬菜界LV」，表皮含天然鹽囊口感脆爽，富含肌醇與礦物質，具抗氧化與代謝之效。" },
+        { name: "南美假櫻桃", icon: "🍒", desc: "果實紅潤香甜，富含維生素C與抗氧化物，兼具食用與觀賞價值。" },
+        { name: "迷迭香", icon: "🌿", desc: "含迷迭香酸，具抗氧化、提神醒腦之效，常用於排餐去腥與芳香紓壓。" },
+        { name: "油甘", icon: "🍏", desc: "「印度聖果」，富含超高維生素C與多酚，抗氧化、護肝並助消化。" },
+        { name: "蓮子", icon: "🌰", desc: "性平，具補脾止瀉、益腎澀精及養心安神之效，為養生湯品佳品。" },
+        { name: "左手香", icon: "🌿", desc: "具消炎抗菌之效，揉碎塗抹可舒緩蚊蟲叮咬與皮膚癢痛。" },
+        { name: "薄荷", icon: "🍃", desc: "富含薄荷腦，清熱解毒、提神醒腦，能緩解頭痛與腸胃脹氣。" },
+        { name: "杭菊", icon: "🌼", desc: "富含黃酮與葉黃素，能清肝明目、緩解眼疲勞與輔助安神。" },
+        { name: "芳香萬壽菊", icon: "🌼", desc: "全株具百香果香氣可驅蚊，嫩葉可泡茶或入菜，兼具觀賞與生態價值。" },
+        { name: "香茅", icon: "🌾", desc: "富含檸檬醛，具促進消化與獨特檸檬清香，精油具天然驅蚊作用。" },
+        { name: "茴香", icon: "🌱", desc: "溫中散寒、健胃理氣，特殊香氣能去腥，嫩葉可作餃子餡料。" },
+        { name: "荷花", icon: "🪷", desc: "全株可入藥與食用，蓮子蓮藕具養心安神之效，花朵極具觀賞價值。" },
+        { name: "檸檬馬鞭草", icon: "🍋", desc: "具濃郁檸檬香氣，能舒緩壓力、促進消化並具良好防蚊功效。" }
+    ];
+
+    const allQuestions = [
+        { q: "哪一種植物的葉片厚實含有豐富膠質，常用於舒緩皮膚與美容保養？", options: ["蘆薈", "薄荷", "香茅", "茴香"], answer: "蘆薈" },
+        { q: "被譽為「蔬菜界LV」，表皮吸附天然鹽囊且口感脆爽的是哪一種植物？", options: ["冰菜", "杭菊", "蓮子", "左手香"], answer: "冰菜" },
+        { q: "哪一種植物具有強烈而清香的木質草本香氣，常應用於排餐去腥提味？", options: ["迷迭香", "荷花", "油甘", "南美假櫻桃"], answer: "迷迭香" },
+        { q: "被譽為「超級水果」與「印度聖果」，入口先酸苦後甘甜的是哪一種？", options: ["油甘", "芳香萬壽菊", "檸檬馬鞭草", "蘆薈"], answer: "油甘" },
+        { q: "民間極常見的草藥，揉碎塗抹可舒緩蚊蟲叮咬與皮膚癢痛的是？", options: ["左手香", "冰菜", "茴香", "香茅"], answer: "左手香" },
+        { q: "富含薄荷腦，具有清熱解毒與提神醒腦之效的清新植物是？", options: ["薄荷", "蓮子", "杭菊", "迷迭香"], answer: "薄荷" },
+        { q: "富含黃酮與葉黃素，能清肝明目、緩解眼疲勞的花卉是？", options: ["杭菊", "荷花", "南美假櫻桃", "油甘"], answer: "杭菊" },
+        { q: "全株帶有舒服的百香果香氣，可驅蚊蟲防病害的是哪一種植物？", options: ["芳香萬壽菊", "香茅", "檸檬馬鞭草", "薄荷"], answer: "芳香萬壽菊" },
+        { q: "富含檸檬醛，具天然驅蚊與獨特檸檬清香的是哪一種植物？", options: ["香茅", "迷迭香", "蘆薈", "冰菜"], answer: "香茅" },
+        { q: "具溫中散寒與理氣之效，特殊香氣能去魚肉腥味，嫩葉可作餃子餡料的是？", options: ["茴香", "左手香", "油甘", "杭菊"], answer: "茴香" }
+    ];
+
+    let currentQuiz = [];
+    let currentIndex = 0;
+    let score = 0;
+    let answered = false;
+
+    // 啟動與嘗試自動播放音樂
+    function tryPlayBGM() {
+        const bgm = document.getElementById("bgm");
+        const btn = document.getElementById("music-btn");
+        
+        bgm.play().then(() => {
+            btn.innerHTML = "⏸️ 暫停音樂";
+        }).catch(() => {
+            // 被瀏覽器阻擋時，顯示點擊啟用狀態
+            btn.innerHTML = "🎵 點擊播放音樂";
+        });
+    }
+
+    // 任何畫面點擊皆觸發音樂播放（解開瀏覽器自動播放限制）
+    function enableAudioOnInteraction() {
+        const bgm = document.getElementById("bgm");
+        if (bgm.paused) {
+            tryPlayBGM();
+        }
+        document.removeEventListener("click", enableAudioOnInteraction);
+        document.removeEventListener("touchstart", enableAudioOnInteraction);
+    }
+
+    document.addEventListener("click", enableAudioOnInteraction);
+    document.addEventListener("touchstart", enableAudioOnInteraction);
+
+    function toggleMusic() {
+        const bgm = document.getElementById("bgm");
+        const btn = document.getElementById("music-btn");
+        if (bgm.paused) {
+            bgm.play().then(() => {
+                btn.innerHTML = "⏸️ 暫停音樂";
+            });
+        } else {
+            bgm.pause();
+            btn.innerHTML = "🎵 播放音樂";
+        }
+    }
+
+    function speakText(text) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-TW';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function initHerbList() {
+        const listContainer = document.getElementById("herb-list");
+        let html = "";
+        herbsData.forEach(item => {
+            const imgFileName = `${item.name}.png`;
+            html += `
+                <div class="herb-item">
+                    <div class="herb-media">
+                        <img src="${imgFileName}" alt="${item.name}" onerror="this.onerror=null; this.parentNode.innerHTML='${item.icon}';">
+                    </div>
+                    <div class="herb-info">
+                        <h4>${item.name}</h4>
+                        <p>${item.desc}</p>
+                        <button class="speak-btn" onclick="speakText('${item.name}。${item.desc}')">🔊 語音介紹</button>
+                    </div>
+                </div>
+            `;
+        });
+        listContainer.innerHTML = html;
+    }
+
+    function switchTab(index) {
+        window.speechSynthesis.cancel();
+        const tabs = document.querySelectorAll(".tab");
+        const contents = document.querySelectorAll(".tab-content");
+        tabs.forEach((t, i) => {
+            t.classList.toggle("active", i === index);
+            contents[i].classList.toggle("active", i === index);
+        });
+        if (index === 1 && currentQuiz.length === 0) {
+            startQuiz();
+        }
+    }
+
+    function startQuiz() {
+        currentQuiz = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, 5);
+        currentIndex = 0;
+        score = 0;
+        document.getElementById("quiz-container").style.display = "block";
+        document.getElementById("result-container").style.display = "none";
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        answered = false;
+        document.getElementById("next-btn").style.display = "none";
+        document.getElementById("feedback-box").className = "";
+        document.getElementById("feedback-box").innerText = "";
+        
+        const qData = currentQuiz[currentIndex];
+        document.getElementById("question-counter").innerText = `📝 第 ${currentIndex + 1} 題 / 共 5 題`;
+        document.getElementById("question-text").innerText = qData.q;
+
+        const optionsContainer = document.getElementById("options-container");
+        optionsContainer.innerHTML = "";
+
+        qData.options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = opt;
+            btn.onclick = () => selectOption(btn, opt, qData.answer);
+            optionsContainer.appendChild(btn);
+        });
+
+        speakText(`第 ${currentIndex + 1} 題：${qData.q}`);
+    }
+
+    function speakCurrentQuestion() {
+        const qData = currentQuiz[currentIndex];
+        speakText(qData.q);
+    }
+
+    function selectOption(selectedBtn, selectedOpt, correctAns) {
+        if (answered) return;
+        answered = true;
+
+        const feedbackBox = document.getElementById("feedback-box");
+        const buttons = document.querySelectorAll(".option-btn");
+
+        buttons.forEach(btn => {
+            if (btn.innerText === correctAns) {
+                btn.classList.add("correct");
+            } else if (btn === selectedBtn) {
+                btn.classList.add("wrong");
+            }
+            btn.style.cursor = "default";
+        });
+
+        if (selectedOpt === correctAns) {
+            score++;
+            feedbackBox.className = "success";
+            feedbackBox.innerHTML = "🎉 答對了！您真厲害！";
+            document.getElementById("success-sound").play().catch(e => {});
+            speakText("答對了！您真厲害！");
+        } else {
+            feedbackBox.className = "error";
+            feedbackBox.innerHTML = `❌ 答錯囉！正確答案是：<strong>${correctAns}</strong>`;
+            document.getElementById("fail-sound").play().catch(e => {});
+            speakText(`答錯囉！正確答案是 ${correctAns}`);
+        }
+
+        document.getElementById("next-btn").style.display = "block";
+    }
+
+    function nextQuestion() {
+        currentIndex++;
+        if (currentIndex < currentQuiz.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        document.getElementById("quiz-container").style.display = "none";
+        document.getElementById("result-container").style.display = "block";
+        document.getElementById("score-text").innerText = `您答對了 ${score} / 5 題！`;
+        
+        const comment = score >= 4 ? "🌟 太棒了！您獲得了【健康達人】稱號！" : "👏 感謝參與！對社區的香草植物有了更深的認識囉！";
+        document.getElementById("comment-text").innerText = comment;
+        
+        document.getElementById("cheer-sound").play().catch(e => {});
+        speakText(`闖關完成！您總共答對了 ${score} 題。${comment}`);
+    }
+
+    function restartQuiz() {
+        startQuiz();
+    }
+
+    // 網頁載入後立即試播背景音樂與初始化
+    window.onload = function() {
+        initHerbList();
+        tryPlayBGM();
+    };
+</script>
+
+</body>
+</html>
